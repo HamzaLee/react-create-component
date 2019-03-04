@@ -1,27 +1,76 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as path from 'path';
+import * as os from 'os';
+import { isNullOrUndefined } from 'util';
+import ComponentCreator from './componentCreator';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-		console.log('Congratulations, your extension "react-create-component" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
-
+	
+	let disposable = vscode.commands.registerCommand('extension.react-create-component', execute);
 	context.subscriptions.push(disposable);
+	
 }
 
-// this method is called when your extension is deactivated
+function validate(componentName:string) : string | null{
+	let isError = false;
+	
+	if(isNullOrUndefined(componentName) || componentName === ''){
+		isError = true;
+	}
+	
+	if(componentName[0] !== componentName[0].toUpperCase()){
+		isError = true;
+	}
+	
+	if(isError){
+		const who = os.userInfo().username;
+		return `${who}, the component name should be in TitleCase :)`;
+	}
+	
+	return null;
+}
+
+
+
+function getFolderPath(uri:any) : string | undefined{
+	if(isNullOrUndefined(uri)){
+		if(isNullOrUndefined(vscode.workspace.rootPath)){
+			return undefined;
+		}
+		return	path.join(vscode.workspace.rootPath,"src" );
+	}else{
+		return uri.fsPath;
+	}
+}
+
+function execute(uri: any) {
+	const inputBoxOptions:vscode.InputBoxOptions = {
+		validateInput: validate,
+		placeHolder:"(Component name)",
+		ignoreFocusOut:true
+	};
+
+	vscode.window.showInputBox(inputBoxOptions).then(r => {
+		if(isNullOrUndefined(r) || r === ''){
+			return;
+		}
+		
+		const folderPath = getFolderPath(uri);
+		
+		if(isNullOrUndefined(folderPath)){
+			vscode.window.showErrorMessage("Connot find the root folder, try with context menu.");
+			return;
+		}
+		
+		const componentCreator = new ComponentCreator(r, folderPath);
+		
+		try {
+			componentCreator.create();
+			vscode.window.showInformationMessage(`${r} component is created !`);
+		} catch (error) {
+			vscode.window.showErrorMessage("Sorry, an error occured :(");
+		}
+	});
+}
+
 export function deactivate() {}

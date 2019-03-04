@@ -1,6 +1,6 @@
 {
 	"name": "react-create-component",
-	"displayName": "ReactCreateComponent",
+	"displayName": "React Create Component",
 	"description": "Create a React component",
 	"version": "0.0.1",
 	"engines": {
@@ -10,14 +10,24 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:extension.react-create-component"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
-			"command": "extension.helloWorld",
-			"title": "Hello World"
-		}]
+		"commands": [
+			{
+			"command": "extension.react-create-component",
+			"title": "Create a React component"
+			}
+		],
+		"menus" : {
+			"explorer/context": [
+				{
+					"command": "extension.react-create-component",
+					"group": "Hli@React"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",

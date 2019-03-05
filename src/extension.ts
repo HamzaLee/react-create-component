@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as os from 'os';
 import { isNullOrUndefined } from 'util';
-import ComponentCreator from './componentCreator1';
+import ComponentCreator from './ComponentCreator';
 
 export function activate(context: vscode.ExtensionContext) {
 	

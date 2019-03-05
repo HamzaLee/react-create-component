@@ -3,6 +3,8 @@
 	"displayName": "React Create Component",
 	"description": "Create a React component",
 	"version": "0.0.1",
+	"publisher": "hamza-litayem",
+	"author":"Hamza Litayem",
 	"engines": {
 		"vscode": "^1.31.0"
 	},

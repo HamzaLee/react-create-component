@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { reportError } from './utils';
+import { reportError } from './reportingUtils';
 
 function createFile(filepath: string, fileContent: string) {
     fs.writeFile(filepath, fileContent, (err) => reportError(err));

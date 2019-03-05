@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {createDirectory, createFile} from './fileManager';
+import {createDirectory, createFile} from './fileUtils';
 
 class ComponentCreator {
     componentName: string;

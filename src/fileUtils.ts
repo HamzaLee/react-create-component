@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from 'path';
 import { reportError } from "./reportingUtils";
 
 function createFile(filepath: string, fileContent: string) {
@@ -23,4 +24,11 @@ function openFolderInExplorer(folderPath:string){
   require('child_process').exec(`start "" "${folderPath}"`);
 }
 
-export { createFile, createDirectory, readFile, readFileAsJson, openFolderInExplorer };
+const isDirectory = (folderPath: string) => fs.lstatSync(folderPath).isDirectory();
+
+const getSubDirectories = (folderPath: string) => fs.readdirSync(folderPath)
+.map(name =>{return {name:name, path:path.join(folderPath, name)};} )
+.filter(e => isDirectory(e.path));
+
+
+export { createFile, createDirectory, readFile, readFileAsJson, openFolderInExplorer, isDirectory, getSubDirectories };

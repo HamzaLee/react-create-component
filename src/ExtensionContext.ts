@@ -10,27 +10,27 @@ class ExtensionContext {
   componentName: string;
   template: Template;
   folderPath: string;
-  private currentTemplate = "TestableComponent";
   templateFolder: string;
+  templateId: string;
 
   constructor(
     vscodeContext: vscode.ExtensionContext,
     targetUri: string,
-    componentName: string
+    componentName: string,
+    templateId: string
   ) {
     this.vsCodeContext = vscodeContext;
     this.targetUri = targetUri;
     this.componentName = componentName;
+    this.templateId = templateId;
     this.template = this.getTemplate(this.vsCodeContext.globalStoragePath);
     this.folderPath = this.getFolderPath(this.targetUri);
-    this.templateFolder = path.join(this.vsCodeContext.globalStoragePath, this.currentTemplate);
+    this.templateFolder = path.join(this.vsCodeContext.globalStoragePath, this.templateId);
   }
 
   private getTemplate(storage: string): Template {
-    
-    // fs.writeFile(path.join(p,"f1.txt"), "fileContent", (err) => console.log(err));
     const fileName = "manifest.json";
-    const filePath = path.join(storage, this.currentTemplate, fileName);
+    const filePath = path.join(storage, this.templateId, fileName);
     const template = <Template>fileUtils.readFileAsJson(filePath);
     return template;
   }

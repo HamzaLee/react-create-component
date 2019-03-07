@@ -1,46 +1,24 @@
-import * as path from 'path';
-import {createDirectory, createFile} from './fileUtils';
+import Command from "./Command";
+import Resolver from "./Resolver";
+import ExtensionContext from './ExtensionContext';
 
 class ComponentCreator {
-    componentName: string;
-    folder: string;
-    constructor(componentName:string, folder: string) {
-        this.componentName = componentName;
-        this.folder = folder;
-    }
+  context:ExtensionContext;
 
-    getComponentFolderPath():string{
-       return path.join(this.folder, this.componentName);
-    }
+  constructor(context: ExtensionContext) {
+    this.context = context;
+  }
 
-    getJsxContent():string{
-        return "import React from 'react';"+        
-                `\n\nconst ${this.componentName} = () => {` +
-                "\n\treturn (<div></div>);" +
-                "\n}"+
-                `\n\nexport default ${this.componentName};`;
-    }
+  create() {
+    this.context.template.commands.forEach(this.executeCommand);
+  }
 
-    create() {
-        createDirectory(this.getComponentFolderPath());
-        this.createComponentFile("css");
-        this.createComponentFile("jsx", this.getJsxContent());
-        this.createIndex();
-        
-    }
-
-    createIndex(){
-        const indexContent = `import ${this.componentName} from './${this.componentName}';`+
-        `\nexport default ${this.componentName};`;
-
-        createFile(path.join(this.getComponentFolderPath(),"index.js"), indexContent);
-    }
-
-    createComponentFile(ext: string, fileContent:string=""){
-        const filePath = path.join(this.getComponentFolderPath(), this.componentName + "." + ext);
-        createFile(filePath,fileContent);
-    }
-   
+  executeCommand = (cmd: Command) => {
+    const resolver = new Resolver(this.context);
+    const resolvedArgs = resolver.resolveArgs(cmd.args);
+    const action = resolver.resolveAction(cmd.action);
+    action.call(null, ...resolvedArgs);
+  }
 }
 
 export default ComponentCreator;

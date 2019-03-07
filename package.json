@@ -4,7 +4,7 @@
 	"description": "Create a React component",
 	"version": "0.0.1",
 	"publisher": "hamza-litayem",
-	"author":"Hamza Litayem",
+	"author": "Hamza Litayem",
 	"engines": {
 		"vscode": "^1.31.0"
 	},
@@ -12,23 +12,27 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.react-create-component"
+		"onCommand:extension.react-create-component",
+		"onCommand:extension.react-create-component-open-folder"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"commands": [{
+				"command": "extension.react-create-component",
+				"title": "Create a React component",
+				"category": "React Create Component"
+			},
 			{
-			"command": "extension.react-create-component",
-			"title": "Create a React component"
+				"command": "extension.react-create-component-open-folder",
+				"title": "Open template folder",
+				"category": "React Create Component"
 			}
 		],
-		"menus" : {
-			"explorer/context": [
-				{
-					"command": "extension.react-create-component",
-					"group": "Hli@React"
-				}
-			]
+		"menus": {
+			"explorer/context": [{
+				"command": "extension.react-create-component",
+				"group": "Hli@React"
+			}]
 		}
 	},
 	"scripts": {

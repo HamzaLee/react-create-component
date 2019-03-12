@@ -2,6 +2,7 @@ import * as fileUtils from "./utils/fileUtils";
 import * as path from "path";
 import ExtensionContext from './ExtensionContext';
 import * as constants from './constants';
+import { isNull } from "util";
 
 class Resolver {
   context: ExtensionContext;
@@ -21,9 +22,13 @@ class Resolver {
   }
 
   private resolveContentArg = (arg: string) => {
-    //Match $content(fileName)
+    const contentRegEx = new RegExp("^\\"+ constants.contentPlaceHolder +"\\((.*)\\)$");
+    const contentRegExMatches = contentRegEx.exec(arg);
+    if(isNull(contentRegExMatches)){
+      throw new Error("An error occured while reading the template file content.");
+    }
 
-    const fileName = arg.substring((constants.contentPlaceHolder+"(").length, arg.length - 1);
+    const fileName = contentRegExMatches[1];
     const filePath = path.join(this.context.templateFolder, fileName);
     const fileContent = fileUtils.readFile(filePath);
     return this.resolvePlaceHolders(fileContent);

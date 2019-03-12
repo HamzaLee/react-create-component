@@ -1,6 +1,7 @@
-import * as fileUtils from "./fileUtils";
+import * as fileUtils from "./utils/fileUtils";
 import * as path from "path";
 import ExtensionContext from './ExtensionContext';
+import * as constants from './constants';
 
 class Resolver {
   context: ExtensionContext;
@@ -10,19 +11,19 @@ class Resolver {
   constructor(context: ExtensionContext) { 
     this.context = context; 
     this.argsPlaceHolders = {
-      "$componentName": this.context.componentName,
-      "$targetFolder": this.context.folderPath
+      [constants.componentNamePlaceHolder]: this.context.componentName,
+      [constants.targetFolderPlaceHolder]: this.context.folderPath
     };
     this.actionsPlaceHolders = {
-      createDirectory: fileUtils.createDirectory,
-      createFile: fileUtils.createFile
+      [constants.createDirectoryAction]: fileUtils.createDirectory,
+      [constants.createFileAction]: fileUtils.createFile
     };
   }
 
   private resolveContentArg = (arg: string) => {
-    //Match $content(blablabla)
+    //Match $content(fileName)
 
-    const fileName = arg.substring("$content(".length, arg.length - 1);
+    const fileName = arg.substring((constants.contentPlaceHolder+"(").length, arg.length - 1);
     const filePath = path.join(this.context.templateFolder, fileName);
     const fileContent = fileUtils.readFile(filePath);
     return this.resolvePlaceHolders(fileContent);
@@ -40,7 +41,7 @@ class Resolver {
   }
 
   private resolveArg = (arg: string) => {
-    if (arg.startsWith("$content")) {
+    if (arg.startsWith(constants.contentPlaceHolder)) {
       return this.resolveContentArg(arg);
     }
 

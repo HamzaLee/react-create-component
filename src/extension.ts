@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
-import * as os from "os";
-import * as fileUtils from "./fileUtils";
+import * as fileUtils from "./utils/fileUtils";
 import { isNullOrUndefined } from "util";
 import ComponentCreator from "./ComponentCreator";
 import ExtensionContext from "./ExtensionContext";
@@ -36,8 +35,7 @@ function validate(componentName: string): string | null {
   }
 
   if (isError) {
-    const who = os.userInfo().username;
-    return `${who}, the component name should be in TitleCase :)`;
+    return `The component name should be in TitleCase :)`;
   }
 
   return null;
@@ -73,9 +71,7 @@ function createComponent(
   const context = new ExtensionContext(vsCodecontext, uri, componentName, selectedTemplate);
 
   if (isNullOrUndefined(context.folderPath)) {
-    vscode.window.showErrorMessage(
-      "Connot find the root folder, try with context menu."
-    );
+    vscode.window.showErrorMessage("Connot find the root folder, try with context menu.");
     return;
   }
 
@@ -83,9 +79,7 @@ function createComponent(
 
   try {
     componentCreator.create();
-    vscode.window.showInformationMessage(
-      `${context.componentName} component is created !`
-    );
+    vscode.window.showInformationMessage(`${context.componentName} component is created !`);
   } catch (error) {
     vscode.window.showErrorMessage("Sorry, an error occured :(");
   }

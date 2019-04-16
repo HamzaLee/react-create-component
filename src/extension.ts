@@ -3,8 +3,10 @@ import * as fileUtils from "./utils/fileUtils";
 import { isNullOrUndefined } from "util";
 import ComponentCreator from "./ComponentCreator";
 import ExtensionContext from "./ExtensionContext";
+import TemplateCreator from "./TemplateCreator";
 
 export function activate(context: vscode.ExtensionContext) {
+  setupSimpleComponentTemplate(context);
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.react-create-component", uri =>
       execute(uri, context)
@@ -43,9 +45,9 @@ function validate(componentName: string): string | null {
 
 function execute(uri: any, vsCodecontext: vscode.ExtensionContext) {
   const inputBoxOptions: vscode.InputBoxOptions = {
-    prompt:`Creating a component under ${uri.fsPath}`,
+    prompt: `Creating a component under ${uri.fsPath}`,
     placeHolder: "(Component name)",
-    validateInput: validate,    
+    validateInput: validate,
     ignoreFocusOut: true
   };
 
@@ -57,9 +59,20 @@ function execute(uri: any, vsCodecontext: vscode.ExtensionContext) {
     vscode.window.showQuickPick(folders).then(selectedTemplate => {
       if (!isNullOrUndefined(selectedTemplate)) {
         createComponent(uri, vsCodecontext, componentName, selectedTemplate);
-      }      
+      }
     });
   });
+}
+
+function setupSimpleComponentTemplate(vsCodecontext: vscode.ExtensionContext) {
+  const templatesPath = vsCodecontext.globalStoragePath;
+  const folders = fileUtils.getSubDirectories(templatesPath);
+  console.log(folders);
+  if (folders.length > 0) {
+    return;
+  }
+  const templateCreator = new TemplateCreator(templatesPath);
+  templateCreator.createSimpleComponentTemplate();
 }
 
 function createComponent(
@@ -84,4 +97,4 @@ function createComponent(
     vscode.window.showErrorMessage("Sorry, an error occured :(");
   }
 }
-export function deactivate() {}
+export function deactivate() { }

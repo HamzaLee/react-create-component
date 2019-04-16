@@ -2,7 +2,7 @@
 	"name": "react-create-component",
 	"displayName": "React Create Component",
 	"description": "Create a React component",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "hamza-litayem",
 	"repository": "https://github.com/HamzaLee/react-create-component",
 	"author": "Hamza Litayem",
@@ -13,6 +13,7 @@
 	"categories": [
 		"Other"
 	],
+	"keywords": ["react", "create", "component", "scaffolding"],
 	"activationEvents": [
 		"onCommand:extension.react-create-component",
 		"onCommand:extension.react-create-component-open-folder"

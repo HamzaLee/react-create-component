@@ -6,6 +6,7 @@
 	"publisher": "hamza-litayem",
 	"repository": "https://github.com/HamzaLee/react-create-component",
 	"author": "Hamza Litayem",
+	"license": "SEE LICENSE IN LICENSE",
 	"engines": {
 		"vscode": "^1.31.0"
 	},

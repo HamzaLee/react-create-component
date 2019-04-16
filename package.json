@@ -4,6 +4,7 @@
 	"description": "Create a React component",
 	"version": "0.0.1",
 	"publisher": "hamza-litayem",
+	"repository": "https://github.com/HamzaLee/react-create-component",
 	"author": "Hamza Litayem",
 	"engines": {
 		"vscode": "^1.31.0"

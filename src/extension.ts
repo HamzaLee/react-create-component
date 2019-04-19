@@ -4,9 +4,11 @@ import { isNullOrUndefined } from "util";
 import ComponentCreator from "./ComponentCreator";
 import ExtensionContext from "./ExtensionContext";
 import TemplateCreator from "./TemplateCreator";
+import { getRemoteTemplateList, downloadTemplate } from "./RemoteTemplate";
 
 export function activate(context: vscode.ExtensionContext) {
   setupSimpleComponentTemplate(context);
+
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.react-create-component", uri =>
       execute(uri, context)
@@ -19,8 +21,31 @@ export function activate(context: vscode.ExtensionContext) {
       () => openFolder(context)
     )
   );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "extension.react-create-component-download-template",
+      () => getRemoteTemplates(context)
+    )
+  );
 }
 
+
+async function getRemoteTemplates(context: vscode.ExtensionContext) {
+
+  const templateList = await getRemoteTemplateList();
+
+  vscode.window.showQuickPick(templateList.map(t => t.name)).then(selectedTemplateName => {
+    if (!isNullOrUndefined(selectedTemplateName)) {
+      const selectedTemplate = templateList.find(t => t.name === selectedTemplateName);
+      if (isNullOrUndefined(selectedTemplate)) {
+        vscode.window.showErrorMessage("Sorry, an error occured :(");
+        return;
+      }
+      downloadTemplate(selectedTemplate, context.globalStoragePath);
+    }
+  });
+}
 function openFolder(context: vscode.ExtensionContext) {
   fileUtils.openFolderInExplorer(context.globalStoragePath);
 }
@@ -67,7 +92,6 @@ function execute(uri: any, vsCodecontext: vscode.ExtensionContext) {
 function setupSimpleComponentTemplate(vsCodecontext: vscode.ExtensionContext) {
   const templatesPath = vsCodecontext.globalStoragePath;
   const folders = fileUtils.getSubDirectories(templatesPath);
-  console.log(folders);
   if (folders.length > 0) {
     return;
   }

@@ -1,0 +1,10 @@
+[
+    {
+        "name": "SimpleComponent",
+        "path": "https://raw.githubusercontent.com/HamzaLee/react-create-component/master/templates/SimpleComponent.tar.gz"
+    },
+    {
+        "name": "TestableComponent",
+        "path": "https://raw.githubusercontent.com/HamzaLee/react-create-component/master/templates/TestableComponent.tar.gz"
+    }
+  ]

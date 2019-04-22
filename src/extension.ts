@@ -46,7 +46,7 @@ async function getRemoteTemplates(context: vscode.ExtensionContext) {
         return;
       }
       await downloadTemplate(selectedTemplate, context.globalStoragePath);
-      vscode.window.showInformationMessage(`Template ${selectedTemplate} was downloaded successfully`);
+      vscode.window.showInformationMessage(`Template ${selectedTemplateName} was downloaded successfully`);
     }
   });
 }

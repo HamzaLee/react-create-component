@@ -8,11 +8,11 @@ Right click on the folder where you want to create your component, click on "Rea
 ## Features
 
 * You can create a component from the contextual menu
-![](https://raw.githubusercontent.com/HamzaLee/react-create-component/master/assets/rcc-1.png)
+![](https://raw.githubusercontent.com/HamzaLee/react-create-component/master/assets/rcc-1.gif)
 * You can create your own component's template
-![](https://raw.githubusercontent.com/HamzaLee/react-create-component/master/assets/rcc-2.png)
+![](https://raw.githubusercontent.com/HamzaLee/react-create-component/master/assets/rcc-2.gif)
 * You can download templates
-![](https://raw.githubusercontent.com/HamzaLee/react-create-component/master/assets/rcc-3.png)
+![](https://raw.githubusercontent.com/HamzaLee/react-create-component/master/assets/rcc-3.gif)
 
 ### 0.0.1
 

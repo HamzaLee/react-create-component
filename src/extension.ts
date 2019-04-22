@@ -7,7 +7,10 @@ import TemplateCreator from "./TemplateCreator";
 import { getRemoteTemplateList, downloadTemplate } from "./RemoteTemplate";
 
 export function activate(context: vscode.ExtensionContext) {
-  setupSimpleComponentTemplate(context);
+
+  if (!fileUtils.exists(context.globalStoragePath)) {
+    fileUtils.createDirectory(context.globalStoragePath);
+  }
 
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.react-create-component", uri =>
@@ -35,17 +38,19 @@ async function getRemoteTemplates(context: vscode.ExtensionContext) {
 
   const templateList = await getRemoteTemplateList();
 
-  vscode.window.showQuickPick(templateList.map(t => t.name)).then(selectedTemplateName => {
+  vscode.window.showQuickPick(templateList.map(t => t.name)).then(async selectedTemplateName => {
     if (!isNullOrUndefined(selectedTemplateName)) {
       const selectedTemplate = templateList.find(t => t.name === selectedTemplateName);
       if (isNullOrUndefined(selectedTemplate)) {
         vscode.window.showErrorMessage("Sorry, an error occured :(");
         return;
       }
-      downloadTemplate(selectedTemplate, context.globalStoragePath);
+      await downloadTemplate(selectedTemplate, context.globalStoragePath);
+      vscode.window.showInformationMessage(`Template ${selectedTemplate} was downloaded successfully`);
     }
   });
 }
+
 function openFolder(context: vscode.ExtensionContext) {
   fileUtils.openFolderInExplorer(context.globalStoragePath);
 }
@@ -89,16 +94,6 @@ function execute(uri: any, vsCodecontext: vscode.ExtensionContext) {
   });
 }
 
-function setupSimpleComponentTemplate(vsCodecontext: vscode.ExtensionContext) {
-  const templatesPath = vsCodecontext.globalStoragePath;
-  const folders = fileUtils.getSubDirectories(templatesPath);
-  if (folders.length > 0) {
-    return;
-  }
-  const templateCreator = new TemplateCreator(templatesPath);
-  templateCreator.createSimpleComponentTemplate();
-}
-
 function createComponent(
   uri: any,
   vsCodecontext: vscode.ExtensionContext,
@@ -121,4 +116,5 @@ function createComponent(
     vscode.window.showErrorMessage("Sorry, an error occured :(");
   }
 }
+
 export function deactivate() { }

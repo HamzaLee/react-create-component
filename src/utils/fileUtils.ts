@@ -78,7 +78,12 @@ function deleteFile(filePath: string) {
   fs.unlink(filePath, err => reportError(err));
 }
 
+function exists(path:string):boolean{
+  return fs.existsSync(path);
+}
+
 export {
+  exists,
   createFile,
   deleteFile,
   createDirectory,
